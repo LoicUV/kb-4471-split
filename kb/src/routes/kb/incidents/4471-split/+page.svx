@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · two problems, not one'
 owner: LoicUV
-status: open
+status: closed
 reviewed: 2026-11-13
 signature: v1.eyJzdWIiOiIzNDI2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTQ1ODQ4OTUsImV4cCI6MTc5NDY3MTI5NX0.C9oQuPju2BR41IesKvGTG_6r1boRv0ohjDWvXlH9KqM
 ---
@@ -16,7 +16,9 @@ signature: v1.eyJzdWIiOiIzNDI2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 
 [#4471](/kb/incidents/4471) merged every report about a wrong date into one ticket and marked it
 **known: one issue, one fix queued**. The reports do not all describe the same bug. The fix
-that is queued repairs one of them. Reports about the other one are still coming in.
+repairs one of them. Engineering closed #4471 on 5 October: the parser is **fixed**
+(`fix(dates): parse dd/mm for eu locales`) and the form hint is **won't fix**, because the
+booking-v3 form was retired.
 
 <Callout>
 Merging was decision [0001](/kb/decisions/0001-dedupe-by-subject): same subject, same issue. The
@@ -29,10 +31,10 @@ the tenant: its locale and its booking form (`causes.ts`).
 <SplitCounts ticket={4471} />
 
 1. **The parser reads dates month first.** Day-first tenants get flipped dates. This is the
-   bug the queued fix is for.
+   bug the fix repaired: **fixed**.
 2. **The booking-v3 form tells day-first tenants to type `MM/DD/YYYY`.** Their people do as
    the hint says and the form reads it their way. The shared parser is not at fault, so the
-   queued fix does not help. Form channel only; tenants on booking-v3 only.
+   parser fix does not help. Engineering will not fix it: **won't fix**, the form is retired. Form channel only; tenants on booking-v3 only.
 
 Five reports describe a date that moves by one day, not a swap (Lisbon and Toronto got
 different days; "only June"). The desk read them that way in `desk-notes.json`, but they are
