@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 · three problems, not one'
+title: '#4471 · two problems, not one'
 owner: LoicUV
 status: open
 reviewed: 2026-11-13
@@ -16,7 +16,7 @@ signature: v1.eyJzdWIiOiIzNDI2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
 
 [#4471](/kb/incidents/4471) merged every report about a wrong date into one ticket and marked it
 **known: one issue, one fix queued**. The reports do not all describe the same bug. The fix
-that is queued repairs one of them. Reports about the other two are still coming in.
+that is queued repairs one of them. Reports about the other one are still coming in.
 
 <Callout>
 Merging was decision [0001](/kb/decisions/0001-dedupe-by-subject): same subject, same issue. The
@@ -33,15 +33,14 @@ the tenant: its locale and its booking form (`causes.ts`).
 2. **The booking-v3 form tells day-first tenants to type `MM/DD/YYYY`.** Their people do as
    the hint says and the form reads it their way. The shared parser is not at fault, so the
    queued fix does not help. Form channel only; tenants on booking-v3 only.
-3. **A date moves by exactly one day.** It is not a month/day swap. The reports mention
-   Lisbon and Toronto getting different days, one month only (June) and an invite that
-   arrived before the booking: this looks like a timezone or DST bug. The desk already
-   read these as "one-day moves" (`desk-notes.json`), but the cause table files them under
-   the parser by tenant.
 
-Each problem gets its own ticket in the repo, with its report count:
-[problem 1](https://github.com/LoicUV/kb-4471-split/issues/1), [problem 2](https://github.com/LoicUV/kb-4471-split/issues/2),
-[problem 3](https://github.com/LoicUV/kb-4471-split/issues/3).
+Five reports describe a date that moves by one day, not a swap (Lisbon and Toronto got
+different days; "only June"). The desk read them that way in `desk-notes.json`, but they are
+counted where the desk files them, under the parser. They may point at a timezone bug. That
+needs its own check, and it is not a third count here.
+
+Each problem has its own ticket in the repo, with its report count:
+[problem 1](https://github.com/LoicUV/kb-4471-split/issues/1), [problem 2](https://github.com/LoicUV/kb-4471-split/issues/2).
 
 ## Intake guessed wrong, often
 
