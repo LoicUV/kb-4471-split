@@ -1,0 +1,58 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: LoicUV
+status: open
+reviewed: 2026-11-13
+signature: v1.eyJzdWIiOiIzNDI2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTQ1ODQ4OTUsImV4cCI6MTc5NDY3MTI5NX0.C9oQuPju2BR41IesKvGTG_6r1boRv0ohjDWvXlH9KqM
+---
+
+<script>
+  import SplitCounts from '#lib/kb/SplitCounts.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) merged every report about a wrong date into one ticket and marked it
+**known: one issue, one fix queued**. The reports do not all describe the same bug. The fix
+that is queued repairs one of them. Reports about the other two are still coming in.
+
+<Callout>
+Merging was decision [0001](/kb/decisions/0001-dedupe-by-subject): same subject, same issue. The
+subjects are generic ("Date is wrong"), so they say nothing about the cause. The cause is in
+the tenant: its locale and its booking form (`causes.ts`).
+</Callout>
+
+## What #4471 holds
+
+<SplitCounts ticket={4471} />
+
+1. **The parser reads dates month first.** Day-first tenants get flipped dates. This is the
+   bug the queued fix is for.
+2. **The booking-v3 form tells day-first tenants to type `MM/DD/YYYY`.** Their people do as
+   the hint says and the form reads it their way. The shared parser is not at fault, so the
+   queued fix does not help. Form channel only; tenants on booking-v3 only.
+3. **A date moves by exactly one day.** It is not a month/day swap. The reports mention
+   Lisbon and Toronto getting different days, one month only (June) and an invite that
+   arrived before the booking: this looks like a timezone or DST bug. The desk already
+   read these as "one-day moves" (`desk-notes.json`), but the cause table files them under
+   the parser by tenant.
+
+Each problem gets its own ticket in the repo, with its report count:
+[problem 1](https://github.com/LoicUV/kb-4471-split/issues/1), [problem 2](https://github.com/LoicUV/kb-4471-split/issues/2),
+[problem 3](https://github.com/LoicUV/kb-4471-split/issues/3).
+
+## Intake guessed wrong, often
+
+`meta.intakeTag` is a guess from the reporter's browser. The tag disagrees with the real cause
+for a share of the reports, so do not count by tag.
+
+<CauseTable ticket={4471} />
+
+## Lessons
+
+- Merging by subject counts the symptom. Two reports with one subject can have two causes.
+- A count that has to be right comes from the data, after you drop duplicate ids.
+
+<RenderStamp {signature} />
